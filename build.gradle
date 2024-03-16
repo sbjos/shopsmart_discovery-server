@@ -19,18 +19,25 @@ ext {
 	set('springCloudVersion', "2023.0.0")
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
-
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }
+
+dependencies {
+	implementation platform('io.micrometer:micrometer-tracing-bom:latest.release')
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+apply plugin: "io.spring.dependency-management"
 
 tasks.named('test') {
 	useJUnitPlatform()
